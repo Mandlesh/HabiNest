@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>HabiNest – NoBroker Clone (MVP)</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="assets/style.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#/landing">HabiNest</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"><a id="navBuy" class="nav-link" href="#/buy">Buy</a></li>
+            <li class="nav-item"><a id="navRent" class="nav-link" href="#/rent">Rent</a></li>
+            <li class="nav-item"><a id="navPGHostel" class="nav-link" href="#/rent">PG/Hostel</a></li>
+            <li class="nav-item"><a id="navPost" class="nav-link d-none" href="#/post">Post a Property</a></li>
+            <li class="nav-item"><a id="navDashboard" class="nav-link d-none" href="#/dashboard">Dashboard</a></li>
+          </ul>
+          <div class="d-flex align-items-center gap-2">
+            <span id="navUser" class="text-secondary small d-none"></span>
+            <a id="navLogin" class="btn btn-outline-primary btn-sm" href="#/login">Log in</a>
+            <a id="navRegister" class="btn btn-primary btn-sm" href="#/register">Register</a>
+            <button id="navLogout" class="btn btn-outline-danger btn-sm d-none" type="button">Log out</button>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <main class="container py-4">
+      <div id="app"></div>
+    </main>
+
+    <!-- Landing page -->
+    <template id="landing-view">
+      <section class="landing-hero text-center py-5 py-md-6 text-white rounded-3">
+        <h1 class="display-5 fw-bold mb-2">Find Your Perfect Space</h1>
+        <p class="mb-4 opacity-75">Discover properties, PGs, and hostels across India’s major cities</p>
+        <div class="card shadow-lg mx-auto" style="max-width: 960px;">
+          <div class="card-body">
+            <ul class="nav nav-pills justify-content-center gap-2 mb-3" id="landingTabs">
+              <li class="nav-item"><button class="btn btn-outline-light active" data-mode="buy">Buy</button></li>
+              <li class="nav-item"><button class="btn btn-outline-light" data-mode="rent">Rent</button></li>
+              <li class="nav-item"><button class="btn btn-outline-light" data-mode="pg">PG</button></li>
+              <li class="nav-item"><button class="btn btn-outline-light" data-mode="hostel">Hostel</button></li>
+            </ul>
+            <form id="landingSearch" class="row g-2 g-md-3 align-items-center">
+              <div class="col-12 col-md-6">
+                <input id="landingQuery" class="form-control form-control-lg" placeholder="Search by city, area, or landmark" />
+              </div>
+              <div class="col-6 col-md-3">
+                <input id="landingMin" class="form-control form-control-lg" type="number" placeholder="Min Price" min="0" step="1" />
+              </div>
+              <div class="col-6 col-md-3">
+                <input id="landingMax" class="form-control form-control-lg" type="number" placeholder="Max Price" min="0" step="1" />
+              </div>
+              <div class="col-12 d-grid d-md-flex justify-content-md-center">
+                <button class="btn btn-primary btn-lg px-4" type="submit">Search</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+
+      <section class="py-5">
+        <h2 class="h4 text-center mb-4">Why Choose HabiNest?</h2>
+        <div class="row g-3 g-md-4">
+          <div class="col-12 col-md-4">
+            <div class="card feature-card h-100 text-center p-3">
+              <div class="fs-2 mb-2">🏠</div>
+              <h3 class="h6">Verified Properties</h3>
+              <p class="text-secondary small mb-0">Curated listings you can trust, updated regularly.</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card feature-card h-100 text-center p-3">
+              <div class="fs-2 mb-2">👥</div>
+              <h3 class="h6">PG & Hostel Options</h3>
+              <p class="text-secondary small mb-0">Find shared accommodations that fit your lifestyle.</p>
+            </div>
+          </div>
+          <div class="col-12 col-md-4">
+            <div class="card feature-card h-100 text-center p-3">
+              <div class="fs-2 mb-2">🛡️</div>
+              <h3 class="h6">Secure Platform</h3>
+              <p class="text-secondary small mb-0">Your data is protected with modern best practices.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </template>
+
+    <!-- Auth -->
+    <template id="login-view">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h1 class="h4 mb-3">Welcome back</h1>
+              <form id="loginForm">
+                <div class="mb-3">
+                  <label for="loginEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="loginEmail" placeholder="you@example.com" required />
+                </div>
+                <div class="mb-3">
+                  <label for="loginPassword" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="loginPassword" required />
+                </div>
+                <button class="btn btn-primary w-100" type="submit">Log in</button>
+              </form>
+              <p class="mt-3 mb-0 text-center">No account? <a href="#/register">Register</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <template id="register-view">
+      <div class="row justify-content-center">
+        <div class="col-12 col-md-6 col-lg-4">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h1 class="h4 mb-3">Create your account</h1>
+              <form id="registerForm">
+                <div class="mb-3">
+                  <label for="regName" class="form-label">Full Name</label>
+                  <input type="text" class="form-control" id="regName" placeholder="Jane Doe" />
+                </div>
+                <div class="mb-3">
+                  <label for="regEmail" class="form-label">Email</label>
+                  <input type="email" class="form-control" id="regEmail" placeholder="you@example.com" required />
+                </div>
+                <div class="mb-3">
+                  <label for="regPassword" class="form-label">Password</label>
+                  <input type="password" class="form-control" id="regPassword" required />
+                </div>
+                <div class="mb-3">
+                  <label for="regPassword2" class="form-label">Confirm Password</label>
+                  <input type="password" class="form-control" id="regPassword2" required />
+                </div>
+                <button class="btn btn-primary w-100" type="submit">Register</button>
+              </form>
+              <p class="mt-3 mb-0 text-center">Already have an account? <a href="#/login">Log in</a></p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- List -->
+    <template id="list-view">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 id="listTitle" class="h4 mb-0">Properties</h1>
+        <a class="btn btn-outline-secondary" href="#/post">Post a Property</a>
+      </div>
+
+      <form id="filtersForm" class="row g-2 align-items-end mb-3">
+        <div class="col-12 col-md-4">
+          <label for="filterSearch" class="form-label">Search</label>
+          <input id="filterSearch" class="form-control" placeholder="Title or location" />
+        </div>
+        <div class="col-6 col-md-2">
+          <label for="filterMin" class="form-label">Min price</label>
+          <input id="filterMin" type="number" min="0" step="1" class="form-control" />
+        </div>
+        <div class="col-6 col-md-2">
+          <label for="filterMax" class="form-label">Max price</label>
+          <input id="filterMax" type="number" min="0" step="1" class="form-control" />
+        </div>
+        <div class="col-12 col-md-3">
+          <label for="filterCategory" class="form-label">Property type</label>
+          <select id="filterCategory" class="form-select">
+            <option value="">All</option>
+            <option>Apartment</option>
+            <option>Villa</option>
+            <option>PG</option>
+            <option>Hostel</option>
+          </select>
+        </div>
+        <div class="col-6 col-md-2">
+          <div class="form-check mt-4">
+            <input class="form-check-input" type="checkbox" id="filterMine" />
+            <label class="form-check-label" for="filterMine">My Listings</label>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <label for="filterSort" class="form-label">Sort</label>
+          <select id="filterSort" class="form-select">
+            <option value="newest" selected>Newest</option>
+            <option value="price_asc">Price: Low to High</option>
+            <option value="price_desc">Price: High to Low</option>
+          </select>
+        </div>
+        <div class="col-12 col-md-1 d-grid">
+          <button id="filterReset" type="button" class="btn btn-outline-secondary">Reset</button>
+        </div>
+      </form>
+
+      <div id="propertiesGrid" class="row g-3"></div>
+    </template>
+
+    <!-- Post -->
+    <template id="post-view">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h1 class="h4 mb-3">Post a Property</h1>
+              <form id="postForm">
+                <div class="row g-3">
+                  <div class="col-12 col-md-6">
+                    <label class="form-label" for="propTitle">Property title</label>
+                    <input id="propTitle" class="form-control" required placeholder="2 BHK Apartment in Andheri" />
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label" for="propLocation">Location</label>
+                    <input id="propLocation" class="form-control" required placeholder="Mumbai, Maharashtra" />
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label" for="propPrice">Price (₹)</label>
+                    <input id="propPrice" type="number" min="0" step="1" class="form-control" required placeholder="7500000" />
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label" for="propType">Type</label>
+                    <select id="propType" class="form-select" required>
+                      <option value="buy">Buy</option>
+                      <option value="rent">Rent</option>
+                    </select>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label" for="propCategory">Property type</label>
+                    <select id="propCategory" class="form-select" required>
+                      <option>Apartment</option>
+                      <option>Villa</option>
+                      <option>PG</option>
+                      <option>Hostel</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label" for="propDesc">Description</label>
+                    <textarea id="propDesc" class="form-control" rows="3" placeholder="Describe the property"></textarea>
+                  </div>
+                  <div class="col-12">
+                    <hr />
+                    <h2 class="h6">Owner contact</h2>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label class="form-label" for="propContactName">Name</label>
+                    <input id="propContactName" class="form-control" placeholder="Owner name" />
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label class="form-label" for="propContactPhone">Phone</label>
+                    <input id="propContactPhone" class="form-control" placeholder="+91 98765 43210" />
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label class="form-label" for="propContactEmail">Email</label>
+                    <input id="propContactEmail" type="email" class="form-control" placeholder="owner@example.com" />
+                  </div>
+                  <div class="col-12">
+                    <hr />
+                    <label class="form-label" for="propImages">Upload images (1–3)</label>
+                    <input id="propImages" class="form-control" type="file" accept="image/*" multiple />
+                    <div id="imagePreview" class="d-flex gap-2 flex-wrap mt-2"></div>
+                    <div class="form-text">Images are stored locally in your browser for this demo.</div>
+                  </div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                  <button class="btn btn-primary" type="submit">Post</button>
+                  <a class="btn btn-outline-secondary" href="#/landing">Cancel</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Edit -->
+    <template id="edit-view">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-8">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <h1 class="h4 mb-3">Edit Property</h1>
+              <form id="editForm">
+                <div class="row g-3">
+                  <div class="col-12 col-md-6">
+                    <label class="form-label" for="propTitle">Property title</label>
+                    <input id="propTitle" class="form-control" required />
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label" for="propLocation">Location</label>
+                    <input id="propLocation" class="form-control" required />
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label" for="propPrice">Price (₹)</label>
+                    <input id="propPrice" type="number" min="0" step="1" class="form-control" required />
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label" for="propType">Type</label>
+                    <select id="propType" class="form-select" required>
+                      <option value="buy">Buy</option>
+                      <option value="rent">Rent</option>
+                    </select>
+                  </div>
+                  <div class="col-12 col-md-6">
+                    <label class="form-label" for="propCategory">Property type</label>
+                    <select id="propCategory" class="form-select" required>
+                      <option>Apartment</option>
+                      <option>Villa</option>
+                      <option>PG</option>
+                      <option>Hostel</option>
+                    </select>
+                  </div>
+                  <div class="col-12">
+                    <label class="form-label" for="propDesc">Description</label>
+                    <textarea id="propDesc" class="form-control" rows="3"></textarea>
+                  </div>
+                  <div class="col-12">
+                    <hr />
+                    <h2 class="h6">Owner contact</h2>
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label class="form-label" for="propContactName">Name</label>
+                    <input id="propContactName" class="form-control" />
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label class="form-label" for="propContactPhone">Phone</label>
+                    <input id="propContactPhone" class="form-control" />
+                  </div>
+                  <div class="col-12 col-md-4">
+                    <label class="form-label" for="propContactEmail">Email</label>
+                    <input id="propContactEmail" type="email" class="form-control" />
+                  </div>
+                  <div class="col-12">
+                    <hr />
+                    <label class="form-label" for="propImages">Replace images (optional)</label>
+                    <input id="propImages" class="form-control" type="file" accept="image/*" multiple />
+                    <div id="imagePreview" class="d-flex gap-2 flex-wrap mt-2"></div>
+                    <div class="form-text">Leave empty to keep current images.</div>
+                  </div>
+                </div>
+                <div class="d-flex gap-2 mt-3">
+                  <button class="btn btn-primary" type="submit">Save changes</button>
+                  <a id="editCancel" class="btn btn-outline-secondary" href="#/landing">Cancel</a>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Dashboard -->
+    <template id="dashboard-view">
+      <div class="row g-3">
+        <div class="col-12 col-lg-4">
+          <div class="card shadow-sm h-100">
+            <div class="card-body">
+              <h2 class="h5">Your Profile</h2>
+              <div class="text-secondary small">Manage your account and listings</div>
+              <hr />
+              <div><span class="text-secondary">Name:</span> <span id="dashName"></span></div>
+              <div><span class="text-secondary">Email:</span> <span id="dashEmail"></span></div>
+              <div class="mt-3 d-grid">
+                <a class="btn btn-primary" href="#/post">+ Post a Property</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-lg-8">
+          <div class="d-flex justify-content-between align-items-center mb-2">
+            <h2 class="h5 mb-0">My Listings</h2>
+            <span class="badge text-bg-secondary" id="dashCount">0</span>
+          </div>
+          <div id="dashGrid" class="row g-3"></div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Detail -->
+    <template id="detail-view">
+      <div class="row justify-content-center">
+        <div class="col-12 col-lg-10">
+          <div class="card shadow-sm">
+            <div class="card-body">
+              <a id="detailBack" href="#/landing" class="text-decoration-none small">← Back</a>
+              <div class="row g-3 mt-1">
+                <div class="col-12 col-md-6">
+                  <div id="detailGallery" class="d-flex gap-2 flex-wrap"></div>
+                </div>
+                <div class="col-12 col-md-6">
+                  <h1 id="detailTitle" class="h4 mb-1"></h1>
+                  <div class="mb-2">
+                    <span id="detailBadge" class="badge badge-type"></span>
+                    <span id="detailCategory" class="badge text-bg-secondary ms-1"></span>
+                  </div>
+                  <div id="detailLocation" class="text-secondary mb-1"></div>
+                  <div id="detailPrice" class="fw-semibold mb-3"></div>
+                  <p id="detailDesc" class="mb-3"></p>
+                  <div class="mb-3">
+                    <h2 class="h6 mb-1">Contact</h2>
+                    <div id="detailContact" class="text-secondary"></div>
+                    <div class="d-flex gap-2 mt-2">
+                      <a id="detailCall" class="btn btn-sm btn-success d-none" href="#">Call</a>
+                      <a id="detailEmail" class="btn btn-sm btn-outline-secondary d-none" href="#">Email</a>
+                    </div>
+                  </div>
+                  <div class="text-secondary small mb-3" id="detailMeta"></div>
+                  <div class="d-flex gap-2">
+                    <a id="detailEdit" class="btn btn-outline-primary btn-sm d-none" href="#">Edit</a>
+                    <button id="detailDelete" class="btn btn-outline-danger btn-sm d-none" type="button">Delete</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </template>
+
+    <!-- Image Lightbox Modal -->
+    <div class="modal fade" id="imageModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-transparent border-0">
+          <button type="button" class="btn-close btn-close-white ms-auto me-2 mt-2" data-bs-dismiss="modal" aria-label="Close"></button>
+          <img id="imageModalImg" src="" alt="Property image" class="w-100 rounded" />
+        </div>
+      </div>
+    </div>
+
+    <footer class="container py-4 small">
+      <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
+        <div class="text-secondary">HabiNest — Direct owner listings. No brokerage.</div>
+        <nav class="d-flex gap-3">
+          <a href="#/buy" class="link-secondary text-decoration-none">Buy</a>
+          <a href="#/rent" class="link-secondary text-decoration-none">Rent</a>
+          <a href="#/post" class="link-secondary text-decoration-none">List your property</a>
+        </nav>
+      </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script defer src="js/app.js"></script>
+  </body>
+</html>

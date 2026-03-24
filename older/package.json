@@ -1,0 +1,12 @@
+{
+  "name": "habinest01",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HabiNest MVP with real-world layout (no code changes)",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=16"
+  }
+}
